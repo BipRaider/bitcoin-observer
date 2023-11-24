@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  api:
+    restart: always
+    container_name: 'api'
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: development
+    volumes:
+      - /opt/app/node_modules
+      - .:/opt/app
+    env_file:
+      - ./.env
+    command: npm run start:dev
+    ports:
+      - 8080:8080
+    networks:
+      - bo_client
+      - bo_api
+
+networks:
+  bo_api:
+    driver: bridge
+  bo_client:
+    driver: bridge

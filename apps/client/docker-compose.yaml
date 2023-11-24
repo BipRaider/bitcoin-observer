@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  client:
+    restart: always
+    container_name: client
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: npm start
+    ports:
+      - '3000:3000'
+    volumes:
+      - /opt/app/node_modules
+      - .:/opt/app
+    environment:
+      - REACT_APP_API_URL=http://backend:8000
+      - WATCHPACK_POLLING=true
+    stdin_open: true
+    tty: true
+    networks:
+      - bo_client
+      - bo_api
+
+networks:
+    bo_api:
+        driver: bridge
+    bo_client:
+        driver: bridge
+
+
+

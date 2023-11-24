@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  client:
+    extends:
+      file: ./apps/client/docker-compose.yaml
+      service: client
+    networks:
+      - bo_api
+      - bo_client
+
+  api:
+    extends:
+      file: ./apps/api/docker-compose.yaml
+      service: api
+    networks:
+      - bo_api
+      - bo_client
+    depends_on:
+      - postgres
+
+  postgres:
+    extends:
+      file: ./docker/docker-compose-postgres.yaml
+      service: postgres
+    volumes:
+      - bo_db:/var/lib/postgresql/data
+    networks:
+      - bo_api
+
+networks:
+  bo_api:
+    driver: bridge
+  bo_client:
+    driver: bridge
+
+volumes:
+  bo_db:

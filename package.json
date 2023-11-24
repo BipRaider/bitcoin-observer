@@ -1,0 +1,15 @@
+{
+  "name": "bitcoin_observer",
+  "version": "1.0.0",
+  "description": "An observer on the rise of the bitcoin price",
+  "keywords": [
+    "bitcoin",
+    "typescript"
+  ],
+  "author": "BipRaider",
+  "license": "ISC",
+  "scripts": {
+    "docker:prod": "docker-compose up -d",
+    "docker:dev": "docker-compose -f docker-compose.dev.yaml up -d"
+  }
+}

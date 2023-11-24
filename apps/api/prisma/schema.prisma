@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "darwin", "windows", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int          @id @default(autoincrement())
+  username     String       @unique
+  email        String       @unique
+  passwordHash String?
+  coinOptions  CoinOptions?
+
+  @@unique([username, email])
+}
+
+model CoinOptions {
+  id          Int      @id @default(autoincrement())
+  coinNames   String[] @default([])
+  upperPrice  Float    @default(0)
+  middlePrice Float    @default(0)
+  lowerPrice  Float    @default(0)
+  userId      Int      @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model CriptoCoin {
+  id        Int      @id @default(autoincrement())
+  currency  String
+  price     String
+  coin      String
+  interval  Int
+  createdAt DateTime @default(now())
+}
