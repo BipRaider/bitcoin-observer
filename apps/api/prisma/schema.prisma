@@ -11,6 +11,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum IntervalEnum {
+  ONE
+  THIRTY
+  SIXTY
+}
+
 model User {
   id           Int          @id @default(autoincrement())
   username     String       @unique
@@ -22,20 +28,24 @@ model User {
 }
 
 model CoinOptions {
-  id          Int      @id @default(autoincrement())
-  coinNames   String[] @default([])
-  upperPrice  Float    @default(0)
-  middlePrice Float    @default(0)
-  lowerPrice  Float    @default(0)
-  userId      Int      @unique
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id          Int          @id @default(autoincrement())
+  coinNames   String[]     @default([])
+  interval    IntervalEnum @default(ONE)
+  upperPrice  Float        @default(0)
+  middlePrice Float        @default(0)
+  lowerPrice  Float        @default(0)
+  userId      Int          @unique
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
-model CriptoCoin {
-  id        Int      @id @default(autoincrement())
-  currency  String
-  price     String
-  coin      String
-  interval  Int
-  createdAt DateTime @default(now())
+model CryptoCoin {
+  id        Int          @id @default(autoincrement())
+  currency  String       @default("USD")
+  price     Float        @default(0)
+  coinId    String       @default("")
+  name      String       @default("")
+  symbol    String       @default("")
+  slug      String       @default("")
+  interval  IntervalEnum @default(ONE)
+  createdAt DateTime     @default(now())
 }

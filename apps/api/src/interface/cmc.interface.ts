@@ -1,3 +1,12 @@
+export const ConstantInterval = {
+  ONE: 'ONE',
+  THIRTY: 'THIRTY',
+  SIXTY: 'SIXTY',
+} as const;
+
+export type TypeInterval = typeof ConstantInterval;
+export type ValueInterval = (typeof ConstantInterval)[keyof typeof ConstantInterval];
+
 export interface CoinCMC {
   id: number;
   name: string;
@@ -19,6 +28,7 @@ export interface CoinCMC {
     };
   };
 }
+
 export interface StatusCMC {
   timestamp: Date;
   error_code: number;
@@ -27,5 +37,5 @@ export interface StatusCMC {
 
 export interface ResCMC {
   status: StatusCMC;
-  data: CoinCMC[];
+  data: Record<string, CoinCMC>;
 }
