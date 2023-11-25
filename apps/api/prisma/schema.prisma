@@ -18,7 +18,7 @@ enum IntervalEnum {
 }
 
 model User {
-  id           Int          @id @default(autoincrement())
+  id           String       @id @default(uuid())
   username     String       @unique
   email        String       @unique
   passwordHash String?
@@ -28,18 +28,18 @@ model User {
 }
 
 model CoinOptions {
-  id          Int          @id @default(autoincrement())
+  id          String       @id @default(uuid())
   coinNames   String[]     @default([])
   interval    IntervalEnum @default(ONE)
   upperPrice  Float        @default(0)
   middlePrice Float        @default(0)
   lowerPrice  Float        @default(0)
-  userId      Int          @unique
+  userId      String       @unique
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model CryptoCoin {
-  id        Int          @id @default(autoincrement())
+  id        String       @id @default(uuid())
   currency  String       @default("USD")
   price     Float        @default(0)
   coinId    Int

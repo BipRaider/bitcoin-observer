@@ -13,8 +13,12 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Patch('/update')
   async update(@Request() req: ReqUser, @Body() dto: UpdateUserDto): Promise<ResUser> {
-    const updatedUser = await this.userService.update({ user: req.user, body: dto });
+    const user = await this.userService.update({ user: req.user, body: dto });
 
-    return updatedUser;
+    delete user.passwordHash;
+    delete user.coinOptions.id;
+    delete user.coinOptions.userId;
+
+    return user;
   }
 }

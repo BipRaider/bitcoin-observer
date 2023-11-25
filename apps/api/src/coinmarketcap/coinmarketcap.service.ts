@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
-import { CryptoCoin } from '@prisma/client';
+import { CryptoCoin, Prisma } from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
 
 import { PrismaService } from '../prisma/prisma.service';
-import { JWTUser, ResCMC, ValueInterval, ConstantInterval } from 'src/interface';
+import { JWTUser, ResCMC, ValueInterval, ConstantInterval, ResCMCGet } from 'src/interface';
+
+import { GetDto } from './dto';
 
 @Injectable()
 export class CoinMarketCapService {
@@ -35,25 +37,14 @@ export class CoinMarketCapService {
     job.stop();
   }
 
-  async get(user: JWTUser) {
-    console.log('CoinMarketCapService', user);
-
-    const { data } = await this.httpService.axiosRef.get<ResCMC>(
-      `/v2/cryptocurrency/quotes/latest`,
-      {
-        params: {
-          symbol: user.coinOptions?.coinNames.join(','),
-        },
-      },
-    );
-
-    console.dir(data);
-  }
-
+  /*** The function adds crypto coin to the database. */
   async add(interval: ValueInterval): Promise<void> {
+    // Get all coin names from coin options
     const coinNames = await this.prisma.coinOptions.findMany({ select: { coinNames: true } });
+    // Converting the names for the query.
     const symbol = [...new Set(coinNames.map(value => value.coinNames).flat())].join(',');
 
+    // Getting the data of the coins.
     const {
       data: { data, status },
     } = await this.httpService.axiosRef.get<ResCMC>(`/v2/cryptocurrency/quotes/latest`, {
@@ -66,8 +57,7 @@ export class CoinMarketCapService {
       for (const name in data) {
         const item = data[name][0];
 
-        const coin: CryptoCoin = {
-          id: item.id,
+        const coin: Omit<CryptoCoin, 'id'> = {
           currency: 'USD',
           price: 0,
           coinId: item.id,
@@ -82,11 +72,54 @@ export class CoinMarketCapService {
           coin.currency = currency;
           coin.price = item.quote[currency]?.price;
 
-          this.prisma.cryptoCoin.create({ data: coin });
+          await this.prisma.cryptoCoin.create({ data: coin });
         }
       }
     } catch {
       return;
     }
+  }
+
+  /***  */
+  async get(user: JWTUser, dto: GetDto): Promise<ResCMCGet> {
+    const find: Prisma.CryptoCoinFindManyArgs = { where: {}, take: 200 };
+    const where: Prisma.CryptoCoinFindManyArgs['where'] = {};
+
+    if (dto.symbol) where.symbol = dto.symbol;
+    else if (!user.coinOptions?.coinNames?.length) {
+      return {
+        interval: dto.interval || user.coinOptions.interval,
+        coinNames: [],
+        data: [],
+      };
+    } else {
+      const filter = user.coinOptions.coinNames.map(value => {
+        return {
+          symbol: value,
+          interval: dto.interval || user.coinOptions.interval,
+        };
+      });
+      where.AND = filter;
+    }
+    if (typeof dto.take === 'number') find.take = dto.take;
+    if (typeof dto.skip === 'number') find.skip = dto.skip;
+    if (typeof dto.cursorId === 'string') find.cursor = { id: dto.cursorId };
+
+    find.where = where;
+    find.select = {
+      id: true,
+      price: true,
+      createdAt: true,
+      currency: true,
+      symbol: true,
+    };
+
+    const data = await this.prisma.cryptoCoin.findMany(find);
+
+    return {
+      data,
+      interval: dto.interval || user.coinOptions.interval,
+      coinNames: user.coinOptions.coinNames,
+    };
   }
 }

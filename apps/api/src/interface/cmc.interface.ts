@@ -1,3 +1,5 @@
+import { CryptoCoin } from '@prisma/client';
+
 export const ConstantInterval = {
   ONE: 'ONE',
   THIRTY: 'THIRTY',
@@ -38,4 +40,10 @@ export interface StatusCMC {
 export interface ResCMC {
   status: StatusCMC;
   data: Record<string, CoinCMC[]>;
+}
+
+export interface ResCMCGet {
+  interval: ValueInterval;
+  coinNames: string[];
+  data: Pick<CryptoCoin, 'price' | 'symbol' | 'currency' | 'createdAt' | 'id'>[];
 }

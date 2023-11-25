@@ -9,6 +9,8 @@ export const ConstantError = {
   MIDDLE_PRICE: 'The middlePrice is incorrect',
   LOWER_PRICE: 'The lowerPrice is incorrect',
   COIN_NAMES: 'The coinNames is incorrect',
+  INTERVAL: 'The interval value is incorrect',
+  VALUE: 'The value is incorrect',
 } as const;
 
 export type TypeError = typeof ConstantError;

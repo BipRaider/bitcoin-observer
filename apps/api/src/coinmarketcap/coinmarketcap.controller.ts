@@ -1,10 +1,11 @@
 import { SchedulerRegistry, Cron, CronExpression } from '@nestjs/schedule';
 import { Controller, Get, Request, UseGuards, Body, Post } from '@nestjs/common';
 
-import { ReqUser, ValueInterval, ConstantInterval } from 'src/interface';
+import { ReqUser, ConstantInterval, ResCMCGet } from 'src/interface';
 import { JwtAuthGuard } from 'src/auth/guards';
 
 import { CoinMarketCapService } from './coinmarketcap.service';
+import { GetDto, IntervalDto } from './dto';
 
 @Controller('coinmarketcap')
 export class CoinMarketCapController {
@@ -13,9 +14,7 @@ export class CoinMarketCapController {
     private schedulerRegistry: SchedulerRegistry,
   ) {}
 
-  @Cron(CronExpression.EVERY_10_SECONDS, {
-    name: 'init',
-  })
+  @Cron(CronExpression.EVERY_10_SECONDS, { name: 'init' })
   async init(): Promise<void> {
     await this.coinMarketCapService.init();
   }
@@ -36,20 +35,20 @@ export class CoinMarketCapController {
   }
 
   @Post('/stop')
-  async stop(@Body() dto: { interval: ValueInterval }): Promise<void> {
+  async stop(@Body() dto: IntervalDto): Promise<{ status: string }> {
     await this.coinMarketCapService.stop(dto);
+    return { status: 'ok' };
   }
 
   @Post('/start')
-  async start(@Body() dto: { interval: ValueInterval }): Promise<void> {
+  async start(@Body() dto: IntervalDto): Promise<{ status: string }> {
     await this.coinMarketCapService.start(dto);
+    return { status: 'ok' };
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/')
-  async get(@Request() req: ReqUser, @Body() dto: Record<string, any>): Promise<void> {
-    console.dir(dto);
-
-    await this.coinMarketCapService.get(req.user);
+  async get(@Request() req: ReqUser, @Body() dto: GetDto): Promise<ResCMCGet> {
+    return await this.coinMarketCapService.get(req.user, dto);
   }
 }
