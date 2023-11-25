@@ -80,30 +80,50 @@ export class CoinMarketCapService {
     }
   }
 
-  /***  */
+  /*** Getting the coins from database. And there are some setting for that.
+   ** `skip`      - How much to skip.
+   ** `take`      - How much to take.
+   ** `cursorId`  - Start receiving from this identifier.
+   ** `symbol`    - The short name of the crypto coin. `BTC`, `ETH`
+   ** `from`      - Sorting start date
+   ** `to`        - Sorting end date
+   */
   async get(user: JWTUser, dto: GetDto): Promise<ResCMCGet> {
     const find: Prisma.CryptoCoinFindManyArgs = { where: {}, take: 200 };
     const where: Prisma.CryptoCoinFindManyArgs['where'] = {};
 
-    if (dto.symbol) where.symbol = dto.symbol;
-    else if (!user.coinOptions?.coinNames?.length) {
+    if (dto.symbol) {
+      // Sorting by symbol as BTC
+      where.symbol = dto.symbol;
+      where.interval = dto.interval || user.coinOptions.interval;
+    } else if (!user.coinOptions?.coinNames?.length) {
       return {
         interval: dto.interval || user.coinOptions.interval,
         coinNames: [],
         data: [],
       };
     } else {
-      const filter = user.coinOptions.coinNames.map(value => {
+      where.AND = user.coinOptions.coinNames.map(value => {
         return {
           symbol: value,
           interval: dto.interval || user.coinOptions.interval,
         };
       });
-      where.AND = filter;
     }
     if (typeof dto.take === 'number') find.take = dto.take;
     if (typeof dto.skip === 'number') find.skip = dto.skip;
-    if (typeof dto.cursorId === 'string') find.cursor = { id: dto.cursorId };
+
+    // Sorting by id
+    if (typeof dto.cursorId === 'string') {
+      find.cursor = { id: dto.cursorId };
+      find.skip = dto.skip || 1;
+    }
+
+    // Sorting by date
+    if (dto.from && dto.to) {
+      find.where.createdAt = { gte: new Date(dto.from), lte: new Date(dto.to) };
+    } else if (dto.from) find.where.createdAt = { gte: new Date(dto.from) };
+    else if (dto.to) find.where.createdAt = { lte: new Date(dto.to) };
 
     find.where = where;
     find.select = {
