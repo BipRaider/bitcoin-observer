@@ -20,25 +20,19 @@ export class CoinMarketCapController {
     await this.coinMarketCapService.init();
   }
 
-  @Cron(CronExpression.EVERY_MINUTE, {
-    name: ConstantInterval.ONE,
-  })
+  @Cron(CronExpression.EVERY_MINUTE, { name: ConstantInterval.ONE })
   async one(): Promise<void> {
     await this.coinMarketCapService.add(ConstantInterval.ONE);
   }
 
-  @Cron(CronExpression.EVERY_30_MINUTES, {
-    name: ConstantInterval.THIRTY,
-  })
+  @Cron(CronExpression.EVERY_30_MINUTES, { name: ConstantInterval.THIRTY })
   async thirty(): Promise<void> {
-    console.dir(ConstantInterval.THIRTY);
+    await this.coinMarketCapService.add(ConstantInterval.THIRTY);
   }
 
-  @Cron(CronExpression.EVERY_HOUR, {
-    name: ConstantInterval.SIXTY,
-  })
+  @Cron(CronExpression.EVERY_HOUR, { name: ConstantInterval.SIXTY })
   async sixty(): Promise<void> {
-    console.dir(ConstantInterval.SIXTY);
+    await this.coinMarketCapService.add(ConstantInterval.SIXTY);
   }
 
   @Post('/stop')

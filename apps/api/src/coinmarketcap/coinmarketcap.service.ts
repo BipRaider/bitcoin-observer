@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
-// import { Prisma } from '@prisma/client';
-
+import { CryptoCoin } from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
 
 import { PrismaService } from '../prisma/prisma.service';
@@ -63,11 +62,31 @@ export class CoinMarketCapService {
 
     if (status.error_message) return;
 
-    for (const name in data) {
-      console.dir({
-        name,
-        pp: data[name][0],
-      });
+    try {
+      for (const name in data) {
+        const item = data[name][0];
+
+        const coin: CryptoCoin = {
+          id: item.id,
+          currency: 'USD',
+          price: 0,
+          coinId: item.id,
+          name: item.name,
+          symbol: item.symbol,
+          slug: item.slug,
+          interval,
+          createdAt: status.timestamp,
+        };
+
+        for (const currency in item.quote) {
+          coin.currency = currency;
+          coin.price = item.quote[currency]?.price;
+
+          this.prisma.cryptoCoin.create({ data: coin });
+        }
+      }
+    } catch {
+      return;
     }
   }
 }

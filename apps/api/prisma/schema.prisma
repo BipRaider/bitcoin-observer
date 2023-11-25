@@ -42,10 +42,10 @@ model CryptoCoin {
   id        Int          @id @default(autoincrement())
   currency  String       @default("USD")
   price     Float        @default(0)
-  coinId    String       @default("")
-  name      String       @default("")
-  symbol    String       @default("")
-  slug      String       @default("")
+  coinId    Int
+  name      String
+  symbol    String
+  slug      String
   interval  IntervalEnum @default(ONE)
   createdAt DateTime     @default(now())
 }

@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "IntervalEnum" AS ENUM ('ONE', 'THIRTY', 'SIXTY');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -12,30 +15,28 @@ CREATE TABLE "User" (
 CREATE TABLE "CoinOptions" (
     "id" SERIAL NOT NULL,
     "coinNames" TEXT[] DEFAULT ARRAY[]::TEXT[],
-    "upperPrice" INTEGER NOT NULL DEFAULT 0,
-    "middlePrice" INTEGER NOT NULL DEFAULT 0,
-    "lowerPrice" INTEGER NOT NULL DEFAULT 0,
+    "interval" "IntervalEnum" NOT NULL DEFAULT 'ONE',
+    "upperPrice" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "middlePrice" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "lowerPrice" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "userId" INTEGER NOT NULL,
 
     CONSTRAINT "CoinOptions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "CriptoCoin" (
+CREATE TABLE "CryptoCoin" (
     "id" SERIAL NOT NULL,
-    "currency" TEXT NOT NULL,
-    "price" TEXT NOT NULL,
-    "coin" TEXT NOT NULL,
-    "interval" INTEGER NOT NULL,
+    "currency" TEXT NOT NULL DEFAULT 'USD',
+    "price" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "coinId" TEXT NOT NULL DEFAULT '',
+    "name" TEXT NOT NULL DEFAULT '',
+    "symbol" TEXT NOT NULL DEFAULT '',
+    "slug" TEXT NOT NULL DEFAULT '',
+    "interval" "IntervalEnum" NOT NULL DEFAULT 'ONE',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "CriptoCoin_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "_CriptoCoinToUser" (
-    "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL
+    CONSTRAINT "CryptoCoin_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -50,17 +51,5 @@ CREATE UNIQUE INDEX "User_username_email_key" ON "User"("username", "email");
 -- CreateIndex
 CREATE UNIQUE INDEX "CoinOptions_userId_key" ON "CoinOptions"("userId");
 
--- CreateIndex
-CREATE UNIQUE INDEX "_CriptoCoinToUser_AB_unique" ON "_CriptoCoinToUser"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_CriptoCoinToUser_B_index" ON "_CriptoCoinToUser"("B");
-
 -- AddForeignKey
 ALTER TABLE "CoinOptions" ADD CONSTRAINT "CoinOptions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "_CriptoCoinToUser" ADD CONSTRAINT "_CriptoCoinToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "CriptoCoin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_CriptoCoinToUser" ADD CONSTRAINT "_CriptoCoinToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
