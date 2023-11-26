@@ -1,13 +1,13 @@
 import axios, { AxiosStatic } from 'axios';
 
-const config = { ...process.env };
+const config = import.meta.env;
 
 export class AxiosServer {
   public axiosRef: AxiosStatic = axios;
 
   constructor() {
     const baseURL = 'http://localhost:8080/';
-    const url = config.NODE_ENV !== 'production' ? baseURL : config.REACT_APP_API_URL;
+    const url = config.DEV ? baseURL : `${config.VITE_API_URL}/`;
 
     this.axiosRef.defaults.baseURL = url;
     this.axiosRef.defaults.headers.get['Accept'] = 'application/json';

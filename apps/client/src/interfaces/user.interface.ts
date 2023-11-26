@@ -16,6 +16,11 @@ export interface CoinOptions {
 }
 
 export interface ReqUserSignUp extends Omit<User, 'id'> {}
-export interface ReqUserSignUp {
+export interface ResUserSignUp {
   data: Record<string, unknown>;
+}
+
+export interface ReqUserSignIn extends Omit<User, 'id' | 'username'> {}
+export interface ResUserSignIn {
+  access_token: string;
 }

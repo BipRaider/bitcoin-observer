@@ -1,0 +1,22 @@
+.wrap {
+  display: grid;
+  grid-template-areas:
+    'header header header'
+    'main main main'
+    'footer footer footer';
+
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 4rem 1fr 4rem;
+}
+
+.header {
+  grid-area: header;
+}
+
+.main {
+  grid-area: main;
+}
+
+.footer {
+  grid-area: footer;
+}

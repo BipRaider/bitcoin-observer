@@ -1,54 +1,34 @@
-import { useState } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import './App.css';
+import { Suspense } from 'react';
+import cn from 'classnames';
+
+import styles from './App.module.css';
+import { Navbar, MainPage } from './components';
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [isOpen, setIsOpen] = useState(true);
-
   return (
-    <>
-      <div className="card">
-        <button onClick={() => setCount(count => count + 1)}>count is {count}</button>
-        <button onClick={() => setIsOpen(true)}>Open</button>
-      </div>
-      <Transition show={isOpen}>
-        <Dialog
-          open={isOpen}
-          onClose={() => {
-            console.dir('first');
-          }}
-          className="relative z-50"
+    <div className={cn('grid w-full min-h-screen', styles.wrap)}>
+      <Suspense>
+        <header className={cn(styles.header, 'mt-2 h-16')}>
+          <Navbar />
+        </header>
+        <main className={cn(styles.main, 'h-full')}>
+          <MainPage />
+        </main>
+        <footer
+          className={cn(
+            styles.footer,
+            'bg-white rounded-lg shadow  dark:bg-gray-800',
+            'w-full mb-2',
+          )}
         >
-          <Transition.Child
-            as="div"
-            enter="transition-all ease-in-out duration-300"
-            enterFrom="opacity-0 backdrop-blur-none"
-            enterTo="opacity-100 backdrop-blur-[.5px]"
-            leave="transition-all ease-in-out duration-200"
-            leaveFrom="opacity-100 backdrop-blur-[.5px]"
-            leaveTo="opacity-0 backdrop-blur-none"
-          >
-            <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-          </Transition.Child>
-          <Transition.Child
-            as="div"
-            enter="transition-all ease-in-out duration-300"
-            enterFrom="translate-x-[-100%]"
-            enterTo="translate-x-0"
-            leave="transition-all ease-in-out duration-200"
-            leaveFrom="translate-x-0"
-            leaveTo="translate-x-[-100%]"
-          >
-            <Dialog.Panel className="fixed bottom-0 left-0 right-0 top-0 flex h-full w-full flex-col bg-white pb-6 dark:bg-black">
-              <Dialog.Title>Deactivate account</Dialog.Title>
-              <Dialog.Description>This will permanently deactivate your account</Dialog.Description>
-              <button onClick={() => setIsOpen(false)}>Cancel</button>
-            </Dialog.Panel>
-          </Transition.Child>
-        </Dialog>
-      </Transition>
-    </>
+          <div className="w-full max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+            <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+              © 2023 . All Rights Reserved.
+            </span>
+          </div>
+        </footer>
+      </Suspense>
+    </div>
   );
 }
 

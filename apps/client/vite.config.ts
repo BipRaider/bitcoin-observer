@@ -17,7 +17,9 @@ export default ({ mode }: { mode: string }) => {
     },
     plugins: [react(), tsconfigPaths()],
     resolve: {
-      alias: {},
+      alias: {
+        '@src/*': './src/*',
+      },
     },
   });
 };

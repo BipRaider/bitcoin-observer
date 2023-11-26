@@ -14,7 +14,11 @@ export class DBServer extends AxiosServer {
   ): Promise<RES | ErrorRes> => {
     try {
       this.setToken();
+
       const { data } = await this.axiosRef.patch(`${url}`, body);
+
+      if ('access_token' in data) this.writeSession('accessToken', data.access_token);
+
       return data;
     } catch (error) {
       if (error instanceof AxiosError) throw error;
@@ -25,7 +29,11 @@ export class DBServer extends AxiosServer {
   public post = async <REQ, RES>(url: ValuePostUrl, body: REQ): Promise<RES | ErrorRes> => {
     try {
       this.setToken();
+
       const { data } = await this.axiosRef.post(url, body);
+
+      if ('access_token' in data) this.writeSession('accessToken', data.access_token);
+
       return data;
     } catch (error) {
       if (error instanceof AxiosError) throw error;
@@ -36,7 +44,11 @@ export class DBServer extends AxiosServer {
   public get = async <REQ, RES>(url: ValueGetUrl, params: REQ): Promise<RES | ErrorRes> => {
     try {
       this.setToken();
+
       const { data } = await this.axiosRef.get(url, { params });
+
+      if ('access_token' in data) this.writeSession('accessToken', data.access_token);
+
       return data;
     } catch (error) {
       if (error instanceof AxiosError) throw error;

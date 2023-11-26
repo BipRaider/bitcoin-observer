@@ -1,39 +1,39 @@
 import { useCallback, useState } from 'react';
 import { DBServer, ErrorRes, isErrorRes } from '../services';
-import { ReqUserSignUp, ResUserSignUp } from '../interfaces';
+import { ReqUserSignIn, ResUserSignIn } from '../interfaces';
 import { useToggleStore } from '@src/store';
 
-export const useSignUp = (): {
+export const useSignIn = (): {
   data: boolean;
   error: ErrorRes | Error | null;
   isLoading: boolean;
-  create: (req: ReqUserSignUp) => Promise<void>;
+  get: (req: ReqUserSignIn) => Promise<void>;
   reset: () => void;
 } => {
   const db = new DBServer();
-  const { setSingUpToggle } = useToggleStore();
+  const { setSingInToggle } = useToggleStore();
   const [data, setData] = useState<boolean>(false);
   const [error, setError] = useState<ErrorRes | Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const create = useCallback(
-    async (req: ReqUserSignUp): Promise<void> => {
-      setSingUpToggle.off;
+  const get = useCallback(
+    async (req: ReqUserSignIn): Promise<void> => {
+      setSingInToggle.off;
       setIsLoading(true);
       setError(null);
 
       try {
-        const res = await db.post<ReqUserSignUp, ResUserSignUp>('/auth/signup', req);
+        const res = await db.post<ReqUserSignIn, ResUserSignIn>('/auth/signin', req);
         if (isErrorRes(res)) {
           setError(res);
-          setSingUpToggle.off;
+          setSingInToggle.off;
         } else {
           setData(true);
-          setSingUpToggle.on;
+          setSingInToggle.on;
         }
       } catch (error) {
         setError(new Error('Something went wrong!'));
-        setSingUpToggle.off;
+        setSingInToggle.off;
       }
 
       setIsLoading(false);
@@ -44,8 +44,8 @@ export const useSignUp = (): {
   const reset = useCallback((): void => {
     setData(false);
     setError(null);
-    setSingUpToggle.off;
+    setSingInToggle.off;
   }, [data, error]);
 
-  return { data, error, isLoading, create, reset };
+  return { data, error, isLoading, get, reset };
 };

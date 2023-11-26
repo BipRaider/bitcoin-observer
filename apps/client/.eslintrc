@@ -1,27 +1,49 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "env": { "browser": true, "es2020": true },
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended",
+    "plugin:react-hooks/recommended"
   ],
-  "ignorePatterns": ["dist", "tailwind.config.js", "postcss.config.js"],
-  "plugins": ["react-refresh", "react", "react-hooks"],
+  "ignorePatterns": [
+    "dist",
+    "tailwind.config.cjs",
+    "postcss.config.cjs"
+  ],
+  "plugins": [
+    "react-refresh",
+    "react",
+    "react-hooks"
+  ],
   "rules": {
-    "@typescript-eslint/no-explicit-any": [0],
-    "react-refresh/only-export-components": [1, { "allowConstantExport": true }],
+    "no-console": [
+      1,
+      {
+        "allow": [
+          "error"
+        ]
+      }
+    ],
+    "@typescript-eslint/no-explicit-any": 0,
+    "react-refresh/only-export-components": 0,
     "react/jsx-props-no-spreading": 0,
     "react/react-in-jsx-scope": 0,
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [".tsx", ".ts"],
-      },
+        "extensions": [
+          ".tsx",
+          ".ts"
+        ]
+      }
     ],
     "react-hooks/rules-of-hooks": 1,
     "react-hooks/exhaustive-deps": 0,
-    "react/prop-types": 0,
-  },
-};
+    "react/prop-types": 0
+  }
+}
