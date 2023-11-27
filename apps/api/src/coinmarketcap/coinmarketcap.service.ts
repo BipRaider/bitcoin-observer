@@ -121,8 +121,11 @@ export class CoinMarketCapService {
       createdAt: true,
       currency: true,
       symbol: true,
+      interval: true,
     };
-
+    find.orderBy = {
+      createdAt: 'asc',
+    };
     const data = await this.prisma.cryptoCoin.findMany(find);
 
     return {

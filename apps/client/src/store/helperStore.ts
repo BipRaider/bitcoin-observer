@@ -9,20 +9,16 @@ type FilterCC = SortCC & {
   arr: CryptoCoin[];
 };
 
-export const newMapCC = (data: CryptoCoin[]): Map<string, CryptoCoin> => {
-  const map: Map<string, CryptoCoin> = new Map();
-  for (const coin of data) map.set(coin.id, coin);
-  return map;
-};
-
 export const sortCC = (data: CryptoCoin[]): SortCC => {
   const map: Map<string, CryptoCoin> = new Map();
-
   const sort: Record<string, CryptoCoin[]> = {};
+
   for (const coin of data) {
-    if (!sort[coin.symbol]?.length) sort[coin.symbol] = [];
-    sort[coin.symbol].push(coin);
     map.set(coin.id, coin);
+
+    const key = `${coin.symbol}_${coin.interval}`;
+    if (!sort[key]?.length) sort[key] = [];
+    sort[key].push(coin);
   }
   return { sort, map };
 };

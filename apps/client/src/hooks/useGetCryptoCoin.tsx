@@ -11,7 +11,7 @@ export const useGetCryptoCoin = (): {
   reset: () => void;
 } => {
   const db = new DBServer();
-  const { addCMC } = useCMCStore();
+  const { cmc, addCMC, addNewCoins } = useCMCStore();
 
   const [data, setData] = useState<boolean>(false);
   const [error, setError] = useState<ErrorRes | Error | null>(null);
@@ -30,7 +30,8 @@ export const useGetCryptoCoin = (): {
           setError(res);
         } else {
           setData(true);
-          addCMC(res);
+          if (!cmc.coinList.length) addCMC(res);
+          else addNewCoins(res);
         }
       } catch (error) {
         setError(new Error('Something went wrong!'));

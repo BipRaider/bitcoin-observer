@@ -35,10 +35,10 @@ export const Navbar: React.FC = (): JSX.Element => {
         <div className="flex justify-end items-center md:w-1/3">
           {user.id && <p className="text-base text-gray-900 dark:text-white">{user.username}</p>}
           <div className="ml-4 hidden md:flex md:justify-end gap-1">
-            {user.id && <Button onClick={handleSignOut}>Sign Out</Button>}
             {!user.id && <SignIn />}
+            {!user.id && <SignUp />}
             <Setting />
-            <SignUp />
+            {user.id && <Button onClick={handleSignOut}>Sign Out</Button>}
           </div>
         </div>
       </div>

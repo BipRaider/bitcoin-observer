@@ -21,6 +21,7 @@ type Actions = {
   reset: () => void;
   addCMC: (payload: ResCMCGet) => void;
   addNewCoins: (payload: ResCMCGet) => void;
+  setLastId: (id: string) => void;
 };
 
 const BaseState: State = {
@@ -42,40 +43,44 @@ export const stateCreator = (
     ...BaseState,
     ...initProps,
     reset: (): void => set(BaseState),
+    setLastId: (id: string): void => {
+      return set(state => {
+        state.cmc.lastId = id;
+      });
+    },
     addCMC: (payload: ResCMCGet): void => {
       return set(state => {
         if (payload.interval) state.cmc.interval = payload.interval;
         if (payload.coinNames.length) state.cmc.coinNames = payload.coinNames;
         if (payload.data.length) state.cmc.coinList = payload.data;
 
-        const lastId = payload.data.pop()?.id;
-        if (lastId) state.cmc.lastId = lastId;
-
         if (payload.data.length > 0) {
           const { sort } = sortCC(payload.data);
-          for (const coin in sort) {
-            state.cmc.coinMap.set(`${coin}_${payload.interval}`, sort[coin]);
+          for (const key in sort) {
+            state.cmc.coinMap.set(key, sort[key]);
           }
         }
+
+        const lastId = payload.data[payload?.data?.length - 1].id;
+
+        if (lastId) state.cmc.lastId = lastId;
       });
     },
     addNewCoins: (payload: ResCMCGet): void => {
       return set(state => {
         if (payload.data.length > 0) {
           const { data } = payload;
-
-          const lastId = data?.pop()?.id;
-          if (lastId) state.cmc.lastId = lastId;
-
           const { arr, sort } = filterCC([...state.cmc.coinList, ...data]);
 
           state.cmc.coinList = arr;
 
-          for (const coin in sort) {
-            const key = `${coin}_${payload.interval}`;
-            if (sort[coin]?.length) state.cmc.coinMap.set(key, sort[coin]);
-            else state.cmc.coinMap.set(key, sort[coin]);
+          for (const key in sort) {
+            if (sort[key]?.length) state.cmc.coinMap.set(key, sort[key]);
+            else state.cmc.coinMap.set(key, sort[key]);
           }
+
+          const lastId = data[data.length - 1].id;
+          if (lastId) state.cmc.lastId = lastId;
         }
       });
     },

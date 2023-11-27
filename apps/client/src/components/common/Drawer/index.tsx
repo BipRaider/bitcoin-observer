@@ -49,7 +49,9 @@ export const Drawer: React.FC<Props> = ({
                   className,
                 )}
               >
-                <Dialog.Title>{title}</Dialog.Title>
+                <Dialog.Title className={cn('uppercase text-center p-2 text-lg  my-5')}>
+                  {title}
+                </Dialog.Title>
                 {children}
               </Dialog.Panel>
             </Transition.Child>
