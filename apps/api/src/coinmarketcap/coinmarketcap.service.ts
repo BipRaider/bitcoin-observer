@@ -45,7 +45,7 @@ export class CoinMarketCapService {
     try {
       for (const name in data) {
         const item = data[name][0];
-
+        if (!item) continue;
         const coin: Omit<CryptoCoin, 'id'> = {
           currency: 'USD',
           price: 0,
@@ -54,14 +54,15 @@ export class CoinMarketCapService {
           symbol: item.symbol,
           slug: item.slug,
           interval,
-          createdAt: status.timestamp,
+          createdAt: new Date(status.timestamp),
         };
 
         for (const currency in item.quote) {
           coin.currency = currency;
           coin.price = item.quote[currency]?.price;
 
-          await this.prisma.cryptoCoin.create({ data: coin });
+          const t = await this.prisma.cryptoCoin.create({ data: coin });
+          console.log('add coin', t);
         }
       }
     } catch {
@@ -80,11 +81,25 @@ export class CoinMarketCapService {
   async get(user: JWTUser, dto: GetDto): Promise<ResCMCGet> {
     const find: Prisma.CryptoCoinFindManyArgs = { where: {}, take: 20 };
     const where: Prisma.CryptoCoinFindManyArgs['where'] = {};
+    find.where = where;
+    let createdAt: Prisma.CryptoCoinFindManyArgs['where']['createdAt'] = {};
+
+    // Sorting by date
+    if (dto.from && dto.to) {
+      createdAt = { gte: new Date(dto.from), lte: new Date(dto.to) };
+    } else if (dto.from) createdAt = { gte: new Date(dto.from) };
+    else if (dto.to) createdAt = { lte: new Date(dto.to) };
+
+    if (typeof dto.cursorId === 'string') {
+      find.cursor = { id: dto.cursorId };
+      find.skip = dto.skip || 1;
+    }
 
     if (dto.symbol) {
       // Sorting by symbol as BTC
       where.symbol = dto.symbol;
       where.interval = dto.interval || user.coinOptions.interval;
+      where.createdAt = createdAt;
     } else if (!user.coinOptions?.coinNames?.length) {
       return {
         interval: dto.interval || user.coinOptions.interval,
@@ -96,25 +111,13 @@ export class CoinMarketCapService {
         return {
           symbol: value,
           interval: dto.interval || user.coinOptions.interval,
+          createdAt,
         };
       });
     }
     if (typeof dto.take === 'number' && dto.take > 0) find.take = dto.take;
     if (typeof dto.skip === 'number' && dto.skip > 0) find.skip = dto.skip;
 
-    // Sorting by id
-    if (typeof dto.cursorId === 'string') {
-      find.cursor = { id: dto.cursorId };
-      find.skip = dto.skip || 1;
-    }
-
-    // Sorting by date
-    if (dto.from && dto.to) {
-      find.where.createdAt = { gte: new Date(dto.from), lte: new Date(dto.to) };
-    } else if (dto.from) find.where.createdAt = { gte: new Date(dto.from) };
-    else if (dto.to) find.where.createdAt = { lte: new Date(dto.to) };
-
-    find.where = where;
     find.select = {
       id: true,
       price: true,
@@ -126,6 +129,7 @@ export class CoinMarketCapService {
     find.orderBy = {
       createdAt: 'asc',
     };
+
     const data = await this.prisma.cryptoCoin.findMany(find);
 
     return {

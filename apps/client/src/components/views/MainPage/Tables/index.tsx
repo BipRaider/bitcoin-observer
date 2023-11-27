@@ -28,6 +28,7 @@ export const Tables: React.FC<Props> = (): JSX.Element => {
   const [take, setTake] = useState<number>(20);
   const [from, setFrom] = useState<Date>();
   const [to, setTo] = useState<Date>();
+  const [skip, setSkip] = useState<number>(0);
 
   const sortByDate = (list: CryptoCoin[]): CryptoCoin[] => {
     if (!from && !to) return list;
@@ -45,7 +46,6 @@ export const Tables: React.FC<Props> = (): JSX.Element => {
 
   const sortItems = (key: string) => {
     const coins = coinMap.get(key);
-
     resetItem(coins);
   };
 
@@ -55,11 +55,12 @@ export const Tables: React.FC<Props> = (): JSX.Element => {
       const { coinOptions } = user;
       const payload: ReqCMCGet = {};
 
-      if (lastId) payload.cursorId = lastId;
+      if (lastId && skip) payload.cursorId = lastId;
       if (coinOptions.interval) payload.interval = interval || coinOptions.interval;
       if (symbol) payload.symbol = symbol;
       if (from) payload.from = from;
       if (to) payload.to = to;
+
       if (take) {
         const takeSet = Math.abs(Number(take));
         payload.take = takeSet > 200 ? 200 : takeSet;
@@ -67,6 +68,9 @@ export const Tables: React.FC<Props> = (): JSX.Element => {
       }
 
       get(payload);
+      setSkip(1);
+
+      console.dir(skip);
     }
   };
 
@@ -82,17 +86,20 @@ export const Tables: React.FC<Props> = (): JSX.Element => {
   }, [coinList]);
 
   useEffect(() => {
+    if (from) setSkip(0);
+    if (to) setSkip(0);
+    if (symbol) setSkip(0);
+    if (interval) setSkip(0);
+  }, [from, to, symbol, interval]);
+
+  useEffect(() => {
     if (user.id) {
       const { coinOptions } = user;
-      if (interval && symbol) {
-        sortItems(`${symbol}_${interval}`);
-      } else if (interval && !symbol) {
-        sortItems(`${coinOptions.coinNames[0]}_${interval}`);
-      } else if (!interval && symbol) {
-        sortItems(`${symbol}_${coinOptions.interval}`);
-      } else if (!interval && !symbol) {
-        sortItems(`${coinOptions.coinNames[0]}_${coinOptions.interval}`);
-      }
+      const baseKey = `${coinOptions.coinNames[0]}_${coinOptions.interval}`;
+      if (interval && symbol) sortItems(`${symbol}_${interval}`);
+      else if (interval && !symbol) sortItems(`${coinOptions.coinNames[0]}_${interval}`);
+      else if (!interval && symbol) sortItems(`${symbol}_${coinOptions.interval}`);
+      else if (!interval && !symbol) sortItems(baseKey);
     }
   }, [interval, symbol, coinMap, from, to]);
 
