@@ -6,7 +6,7 @@ import { UserSession } from '@src/interfaces';
 
 export interface State {
   session: {
-    user: UserSession;
+    user: Omit<UserSession, 'access_token'>;
     accessToken: UserSession['access_token'];
   };
 }
@@ -18,10 +18,9 @@ export type Actions = {
 };
 export type SessionState = State & Actions;
 
-const baseUser: UserSession = {
+const baseUser: Omit<UserSession, 'access_token'> = {
   id: '',
   username: '',
-  access_token: '',
   coinOptions: {
     coinNames: [],
     interval: 'ONE',

@@ -3,15 +3,24 @@ import cn from 'classnames';
 
 import { Props } from './props';
 
-export const Select: React.FC<Props> = ({ className, label, data = [], setValue }): JSX.Element => {
+export const Select: React.FC<Props> = ({
+  className,
+  label,
+  data = [],
+  setValue,
+  name,
+  keyName,
+  register,
+}): JSX.Element => {
   const text = 'Choose';
 
+  const reg = register && name ? register(name) : {};
+
   const handle = (e: ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value !== text) console.dir(e.target.value);
+    if (e.target.value !== text) return;
 
-    if (setValue) setValue(e.target.value);
+    if (setValue && name) setValue(name, e.target.value);
   };
-
   return (
     <div className={cn('mb-2 w-[150px]', className)}>
       <div className="mb-3">
@@ -23,7 +32,8 @@ export const Select: React.FC<Props> = ({ className, label, data = [], setValue 
         </label>
         <div className="mt-2">
           <select
-            id="size"
+            {...reg}
+            id={name}
             onChange={handle}
             className="block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500  dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
           >
@@ -31,7 +41,7 @@ export const Select: React.FC<Props> = ({ className, label, data = [], setValue 
             {data.map((value, i) => {
               if (typeof value === 'string') return <option key={i}>{value}</option>;
               return (
-                <option key={i} value={value.id}>
+                <option key={i} value={keyName ? value[keyName] : value.id}>
                   {value?.name}
                 </option>
               );

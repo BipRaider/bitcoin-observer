@@ -1,6 +1,6 @@
 import { Body, Controller, Patch, Request, UseGuards } from '@nestjs/common';
 
-import { ReqUser, ResUser } from 'src/interface';
+import { ReqUser, ResServer, ResUser } from 'src/interface';
 
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update.dto';
@@ -12,13 +12,13 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('/update')
-  async update(@Request() req: ReqUser, @Body() dto: UpdateUserDto): Promise<ResUser> {
+  async update(@Request() req: ReqUser, @Body() dto: UpdateUserDto): Promise<ResServer<ResUser>> {
     const user = await this.userService.update({ user: req.user, body: dto });
 
     delete user.passwordHash;
     delete user.coinOptions.id;
     delete user.coinOptions.userId;
 
-    return user;
+    return { status: 'ok', data: user };
   }
 }

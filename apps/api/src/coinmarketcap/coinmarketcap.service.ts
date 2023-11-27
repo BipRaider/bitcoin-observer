@@ -78,7 +78,7 @@ export class CoinMarketCapService {
    ** `to`        - Sorting end date
    */
   async get(user: JWTUser, dto: GetDto): Promise<ResCMCGet> {
-    const find: Prisma.CryptoCoinFindManyArgs = { where: {}, take: 200 };
+    const find: Prisma.CryptoCoinFindManyArgs = { where: {}, take: 20 };
     const where: Prisma.CryptoCoinFindManyArgs['where'] = {};
 
     if (dto.symbol) {
@@ -99,8 +99,8 @@ export class CoinMarketCapService {
         };
       });
     }
-    if (typeof dto.take === 'number') find.take = dto.take;
-    if (typeof dto.skip === 'number') find.skip = dto.skip;
+    if (typeof dto.take === 'number' && dto.take > 0) find.take = dto.take;
+    if (typeof dto.skip === 'number' && dto.skip > 0) find.skip = dto.skip;
 
     // Sorting by id
     if (typeof dto.cursorId === 'string') {

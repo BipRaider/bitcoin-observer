@@ -29,7 +29,7 @@ model User {
 
 model CoinOptions {
   id          String       @id @default(uuid())
-  coinNames   String[]     @default([])
+  coinNames   String[]     @default(["BTC"])
   interval    IntervalEnum @default(ONE)
   upperPrice  Float        @default(0)
   middlePrice Float        @default(0)

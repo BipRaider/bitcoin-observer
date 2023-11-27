@@ -10,9 +10,11 @@ export const Input: React.FC<Props> = ({
   placeholder = 'Enter value',
   className,
   required = false,
+  ...props
 }): JSX.Element => {
   return (
     <input
+      {...props}
       {...register(name)}
       type={type}
       id={name}

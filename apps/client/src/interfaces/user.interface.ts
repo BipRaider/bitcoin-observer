@@ -28,6 +28,19 @@ export interface ResUserSignUp {
   data: Record<string, unknown>;
 }
 
+export interface ReqUpdateUser {
+  username?: string;
+  coinNames?: string;
+  upperPrice?: number;
+  middlePrice?: number;
+  lowerPrice?: number;
+  interval?: ValueInterval;
+}
+export interface ResUpdateUser {
+  status: string;
+  data: UserSession;
+}
+
 export interface ReqUserSignIn extends Omit<User, 'id' | 'username'> {}
 export interface ResUserSignIn {
   status: string;

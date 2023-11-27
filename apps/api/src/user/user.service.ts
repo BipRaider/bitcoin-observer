@@ -41,6 +41,9 @@ export class UserService {
       update: {},
     };
 
+    if (body.interval === 'ONE') coinOptions.update.interval = body.interval;
+    if (body.interval === 'SIXTY') coinOptions.update.interval = body.interval;
+    if (body.interval === 'THIRTY') coinOptions.update.interval = body.interval;
     if (typeof body.upperPrice === 'number') coinOptions.update.upperPrice = body.upperPrice;
     if (typeof body.middlePrice === 'number') coinOptions.update.middlePrice = body.middlePrice;
     if (typeof body.lowerPrice === 'number') coinOptions.update.lowerPrice = body.lowerPrice;

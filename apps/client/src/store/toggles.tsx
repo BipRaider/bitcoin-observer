@@ -7,6 +7,7 @@ interface State {
     reload: boolean;
     signInToggle: boolean;
     signUpToggle: boolean;
+    settingToggle: boolean;
   };
 }
 
@@ -22,6 +23,7 @@ type Actions = {
   setIsAuthToggle: ToggleBoolean;
   setSingInToggle: ToggleBoolean;
   setSingUpToggle: ToggleBoolean;
+  setSettingToggle: ToggleBoolean;
 };
 
 export const toggle = (
@@ -59,6 +61,7 @@ const BaseState: State = {
     signInToggle: false,
     signUpToggle: false,
     isAuth: false,
+    settingToggle: false,
   },
 };
 
@@ -70,6 +73,7 @@ const stateCreator = (): StateCreator<State & Actions, [], [['zustand/immer', ne
     setSingUpToggle: toggle(set, 'signUpToggle'),
     setSingInToggle: toggle(set, 'signInToggle'),
     setIsAuthToggle: toggle(set, 'isAuth'),
+    setSettingToggle: toggle(set, 'settingToggle'),
   }));
 
 export const storeToggle = create(stateCreator());

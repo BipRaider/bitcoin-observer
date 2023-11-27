@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsOptional, IsString, Length, Min, IsInt } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, Length, Min, IsInt, IsEnum } from 'class-validator';
 import { IsPrise } from 'src/decorators';
-import { ConstantError } from 'src/interface';
+import { ConstantError, ConstantInterval, ValueInterval } from 'src/interface';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -30,4 +30,9 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString({ message: ConstantError.COIN_NAMES })
   coinNames: string;
+
+  @IsOptional()
+  @IsString({ message: ConstantError.INTERVAL })
+  @IsEnum(ConstantInterval, { message: ConstantError.INTERVAL })
+  interval: ValueInterval;
 }

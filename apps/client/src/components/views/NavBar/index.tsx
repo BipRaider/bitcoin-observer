@@ -4,6 +4,7 @@ import { SignIn } from './SingIn';
 import { SignUp } from './SingUp';
 import { useCMCStore, useSessionStore, useToggleStore } from '@src/store';
 import { Button } from '@src/components';
+import { Setting } from './Setting';
 
 export const Navbar: React.FC = (): JSX.Element => {
   const { setSingInToggle } = useToggleStore();
@@ -36,6 +37,7 @@ export const Navbar: React.FC = (): JSX.Element => {
           <div className="ml-4 hidden md:flex md:justify-end gap-1">
             {user.id && <Button onClick={handleSignOut}>Sign Out</Button>}
             {!user.id && <SignIn />}
+            <Setting />
             <SignUp />
           </div>
         </div>
