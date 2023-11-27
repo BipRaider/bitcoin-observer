@@ -68,6 +68,8 @@ export const stateCreator = (
     },
     addNewCoins: (payload: ResCMCGet): void => {
       return set(state => {
+        if (payload.interval) state.cmc.interval = payload.interval;
+        if (payload.coinNames.length) state.cmc.coinNames = payload.coinNames;
         if (payload.data.length > 0) {
           const { data } = payload;
           const { arr, sort } = filterCC([...state.cmc.coinList, ...data]);

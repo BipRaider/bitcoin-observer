@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsEnum, IsInt, Min, Max, IsDate } from 'class-validator';
+import { IsOptional, IsString, IsEnum, IsInt, Min, Max, IsDateString } from 'class-validator';
 
 import { ConstantError, ValueInterval, ConstantInterval } from 'src/interface';
 
@@ -28,10 +28,10 @@ export class GetDto {
   symbol: string;
 
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   from: Date;
 
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   to: Date;
 }
