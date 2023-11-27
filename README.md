@@ -14,6 +14,7 @@ This application tracks the price changes of cryptocurrencies.
 
 ## Setup for startup
 
+- Receive a random [Email](https://temp-mail.org)
 - You need to get the API key. [Api key](https://coinmarketcap.com/api/) and add it to the .env
   files. There is a need for it.
 - You have only 10k free of the query to **CoinMarketCap** api.
