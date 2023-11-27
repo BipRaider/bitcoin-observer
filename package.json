@@ -9,13 +9,16 @@
   "author": "BipRaider",
   "license": "ISC",
   "scripts": {
+    "init": "bash ./scripts/init.sh",
+    "init:docker": "bash ./scripts/init-docker.sh",
     "docker:prod": "docker-compose up -d",
     "docker:dev": "docker-compose -f docker-compose.dev.yaml up -d",
-    "docker:log:api": "docker-compose logs -f --tail 100 order",
-    "docker:node:api": "docker-compose exec api node",
+    "docker:log:api": "docker-compose logs -f --tail 100 api",
+    "docker:exec:api": "docker-compose exec api sh",
     "reup:dev:api": "docker-compose rm -sf api && docker-compose -f docker-compose.dev.yaml up -d -V --up api",
     "reup:dev:client": "docker-compose rm -sf client && docker-compose -f docker-compose.dev.yaml up -d -V --build client",
     "docker:clear": "bash ./docker/scripts/clear.sh",
-    "docker:build": "bash ./docker/scripts/build.sh"
+    "docker:build": "bash ./docker/scripts/build.sh",
+    "docker:migrate:api": "bash ./docker/scripts/migrate.sh"
   }
 }

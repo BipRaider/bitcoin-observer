@@ -23,6 +23,7 @@ services:
     env_file:
       - ./envs/coin_market_cap.env
       - ./envs/pg.env
+      - ./envs/jwt.env
     command: npm run start:prod
     networks:
       - bo_api

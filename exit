@@ -1,0 +1,4 @@
+
+> bitcoin_observer@1.0.0 docker:exec:api
+> docker-compose exec api sh run prisma:migrate:dev
+

@@ -1,6 +1,7 @@
 import { StateCreator, create, useStore } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { enableMapSet } from 'immer';
+import { devtools } from 'zustand/middleware';
 
 import { ValueInterval, ResCMCGet, CryptoCoin } from '@src/interfaces';
 import { filterCC, sortCC } from './helperStore';
@@ -88,7 +89,7 @@ export const stateCreator = (
     },
   }));
 
-export const storeCMC = create(stateCreator());
+export const storeCMC = create(devtools(stateCreator()));
 
 export const useCMCStore = (initProps?: Partial<State>): CMCState => {
   const state = useStore(storeCMC, state => state);

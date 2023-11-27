@@ -1,35 +1,68 @@
+# Cryptocoin Observer
+
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This application tracks the price changes of cryptocurrencies.
+
+### Libraries and Frameworks
+
+- [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [React](https://react.dev/) React documentation.
+- [Vite](https://vitejs.dev/) Generation Frontend.
+- [CoinMarketCap](https://coinmarketcap.com) Works with API such as CoinMarketCap.
+- [Docker](https://www.docker.com/) Docker provides a suite of development tools and services.
+
+## Setup for startup
+
+- You need to get the API key. [Api key](https://coinmarketcap.com/api/) and add it to the .env
+  files. There is a need for it.
+- You have only 10k free of the query to **CoinMarketCap** api.
+- [CoinMarketCap api](https://coinmarketcap.com/api/documentation/v1/#section/Introduction)
+  documentation
+- Complete all the env files. Also for production inside the envs folder.
 
 ## Installation
 
 ```bash
-$ npm install
+# Sets up all the dependencies
+$ npm run init
 ```
 
-## Running the app
-
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+# Up docker services and migrate db.
+$ npm run init-docker
 ```
 
-## Test
+## Running the applications
 
 ```bash
-# unit tests
-$ npm run test
+# Start development mode
+$ npm run docker:dev
+```
 
-# e2e tests
-$ npm run test:e2e
+```bash
+# Start production mode
+$ npm run docker:prod
+```
 
-# test coverage
-$ npm run test:cov
+## Working with applications
+
+```bash
+# Updating api service when adding any library.
+$ npm run reup:dev:api
+```
+
+```bash
+# Updating client service when adding any library.
+$ npm run reup:dev:client
+```
+
+```bash
+# Clean up docker if it has containers or images that are not used.
+$ npm run docker:clear
+```
+
+```bash
+# Build docker image and send to the docker cloud.
+$ npm run docker:build
 ```

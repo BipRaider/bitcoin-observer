@@ -59,12 +59,12 @@ export class DateFns {
   public getDayName = (type: 'eeee' | 'eee' | 'eeeeee' | 'eo' | 'e' | 'ee' = 'ee'): number => {
     return Number(format(new Date(), type).substring(0, 2));
   };
-
+  /*** Get Year, month, day. */
   public format = (date: Date | null): string => {
     if (date === null) return '';
     return format(date, 'dd-MM-yyyy');
   };
-
+  /*** Get hour, min, second */
   public format2 = (date: Date | number | null): string => {
     if (date === null) return '';
     return format(date, 'hh:mm:ss');
@@ -87,6 +87,7 @@ export class DateFns {
     const min = format(new Date(date), `mm`);
     return { year, month, day, hours, min, date: payload };
   };
+
   /*** https://date-fns.org/v2.30.0/docs/compareDesc
    ** now === to = 0
    ** now < to  = 1
@@ -99,6 +100,7 @@ export class DateFns {
     else return -1;
   };
 
+  /*** Sorts the array by the specified time */
   public isPeriod = (date: string | Date | null, period?: Period): boolean => {
     if (date === null) return false;
     const newDate = new Date(date);

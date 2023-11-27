@@ -61,8 +61,7 @@ export class CoinMarketCapService {
           coin.currency = currency;
           coin.price = item.quote[currency]?.price;
 
-          const t = await this.prisma.cryptoCoin.create({ data: coin });
-          console.log('add coin', t);
+          await this.prisma.cryptoCoin.create({ data: coin });
         }
       }
     } catch {
