@@ -4,7 +4,7 @@ import { CryptoCoin, Prisma } from '@prisma/client';
 import { HttpService } from '@nestjs/axios';
 
 import { PrismaService } from '../prisma/prisma.service';
-import { JWTUser, ResCMC, ValueInterval, ConstantInterval, ResCMCGet } from 'src/interface';
+import { JWTUser, ResCMC, ValueInterval, ResCMCGet } from 'src/interface';
 
 import { GetDto } from './dto';
 
@@ -15,17 +15,6 @@ export class CoinMarketCapService {
     private readonly httpService: HttpService,
     private schedulerRegistry: SchedulerRegistry,
   ) {}
-
-  async init(): Promise<void> {
-    const init = this.schedulerRegistry.getCronJob('init');
-    init.stop();
-    const one = this.schedulerRegistry.getCronJob(ConstantInterval.ONE);
-    one.stop();
-    const thirty = this.schedulerRegistry.getCronJob(ConstantInterval.THIRTY);
-    thirty.stop();
-    const sixty = this.schedulerRegistry.getCronJob(ConstantInterval.SIXTY);
-    sixty.stop();
-  }
 
   async start(data: { interval: ValueInterval }): Promise<void> {
     const job = this.schedulerRegistry.getCronJob(data.interval);
@@ -103,7 +92,7 @@ export class CoinMarketCapService {
         data: [],
       };
     } else {
-      where.AND = user.coinOptions.coinNames.map(value => {
+      where.OR = user.coinOptions.coinNames.map(value => {
         return {
           symbol: value,
           interval: dto.interval || user.coinOptions.interval,

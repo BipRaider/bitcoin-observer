@@ -14,11 +14,6 @@ export class CoinMarketCapController {
     private schedulerRegistry: SchedulerRegistry,
   ) {}
 
-  @Cron(CronExpression.EVERY_10_SECONDS, { name: 'init' })
-  async init(): Promise<void> {
-    await this.coinMarketCapService.init();
-  }
-
   @Cron(CronExpression.EVERY_MINUTE, { name: ConstantInterval.ONE })
   async one(): Promise<void> {
     await this.coinMarketCapService.add(ConstantInterval.ONE);
@@ -49,6 +44,12 @@ export class CoinMarketCapController {
   @UseGuards(JwtAuthGuard)
   @Get('/')
   async get(@Request() req: ReqUser, @Body() dto: GetDto): Promise<ResCMCGet> {
+    return await this.coinMarketCapService.get(req.user, dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/')
+  async getSort(@Request() req: ReqUser, @Body() dto: GetDto): Promise<ResCMCGet> {
     return await this.coinMarketCapService.get(req.user, dto);
   }
 }

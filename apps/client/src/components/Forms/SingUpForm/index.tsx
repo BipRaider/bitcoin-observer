@@ -6,7 +6,6 @@ import * as z from 'zod';
 import { Button, Label, Input } from '@src/components';
 import { ReqUserSignUp } from '@src/interfaces';
 import { useSignUp } from '@src/hooks';
-import { useToggleStore } from '@src/store';
 
 const schema = z.object({
   email: z.string().email('The email is incorrect.').min(1, {
@@ -26,7 +25,7 @@ const schema = z.object({
 
 export const SignUpForm: React.FC = (): JSX.Element => {
   const { data, create } = useSignUp();
-  const { setSingInToggle } = useToggleStore();
+
   const {
     register,
     handleSubmit,
@@ -37,10 +36,12 @@ export const SignUpForm: React.FC = (): JSX.Element => {
   });
 
   const onSubmit = async (payload: ReqUserSignUp) => {
-    await create(payload);
-    if (data) setSingInToggle.on;
-    else setSingInToggle.off;
-    reset();
+    try {
+      await create(payload);
+      if (data) reset();
+    } catch {
+      return;
+    }
   };
 
   return (

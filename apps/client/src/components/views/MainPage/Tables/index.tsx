@@ -1,57 +1,66 @@
-export const Tables = () => {
+import React, { useEffect } from 'react';
+
+import { Props } from './props';
+import { Item } from './Item';
+import { useCMCStore, useSessionStore, useToggleStore } from '@src/store';
+import { useGetCryptoCoin } from '@src/hooks';
+import { Select } from '@src/components';
+import { IntervalArr } from '@src/interfaces';
+
+export const Tables: React.FC<Props> = (): JSX.Element => {
+  const { toggles, setReload } = useToggleStore();
+  const { get } = useGetCryptoCoin();
+  const {
+    session: { user },
+  } = useSessionStore();
+  const {
+    cmc: { coinList, coinNames },
+  } = useCMCStore();
+
+  useEffect(() => {
+    if (!coinList.length && user.id) get({});
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (toggles.reload && user.id) get({});
+      if (toggles.reload && user.id) setReload.off();
+    } catch {
+      return;
+    }
+  }, [toggles.reload, user]);
+
   return (
-    <div className="relative overflow-x-auto">
+    <div className="relative overflow-x-auto mb-2 mx-10">
+      <div className="flex flex-row flex-wrap gap-1">
+        <Select label={'Coin name'} data={coinNames} />
+        <Select label={'Interval'} data={IntervalArr} />
+        <Select label={'Coin name'} data={coinNames} />
+        <Select label={'Coin name'} data={coinNames} />
+      </div>
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
-            <th scope="col" className="px-6 py-3">
-              Product name
+            <th scope="col" className="md:px-6 px-1 py-3 max-w-[30px] text-start">
+              Coin Name
             </th>
-            <th scope="col" className="px-6 py-3">
-              Color
+            <th scope="col" className="md:px-6 px-1 py-3 text-start">
+              Date/Time
             </th>
-            <th scope="col" className="px-6 py-3">
-              Category
-            </th>
-            <th scope="col" className="px-6 py-3">
+            <th scope="col" className="md:px-6 px-1 py-3 text-start">
               Price
+            </th>
+            <th scope="col" className="md:px-3 px-1 py-3 max-w-[30px] text-center">
+              Currency
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <th
-              scope="row"
-              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              Apple MacBook Pro 17"
-            </th>
-            <td className="px-6 py-4">Silver</td>
-            <td className="px-6 py-4">Laptop</td>
-            <td className="px-6 py-4">$2999</td>
-          </tr>
-          <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <th
-              scope="row"
-              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              Microsoft Surface Pro
-            </th>
-            <td className="px-6 py-4">White</td>
-            <td className="px-6 py-4">Laptop PC</td>
-            <td className="px-6 py-4">$1999</td>
-          </tr>
-          <tr className="bg-white dark:bg-gray-800">
-            <th
-              scope="row"
-              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              Magic Mouse 2
-            </th>
-            <td className="px-6 py-4">Black</td>
-            <td className="px-6 py-4">Accessories</td>
-            <td className="px-6 py-4">$99</td>
-          </tr>
+          {coinList.map(({ id, symbol, price, createdAt, currency }) => {
+            return (
+              <Item key={id} symbol={symbol} price={price} date={createdAt} currency={currency} />
+            );
+          })}
         </tbody>
       </table>
     </div>

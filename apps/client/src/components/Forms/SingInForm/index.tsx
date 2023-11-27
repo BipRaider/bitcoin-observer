@@ -28,8 +28,12 @@ export const SignInForm: React.FC = (): JSX.Element => {
   });
 
   const onSubmit = async (payload: ReqUserSignIn) => {
-    await get(payload);
-    reset();
+    try {
+      await get(payload);
+      reset();
+    } catch {
+      return;
+    }
   };
 
   return (

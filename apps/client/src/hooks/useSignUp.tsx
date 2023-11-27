@@ -11,29 +11,32 @@ export const useSignUp = (): {
   reset: () => void;
 } => {
   const db = new DBServer();
-  const { setSingUpToggle } = useToggleStore();
+  const { setSingUpToggle, setSingInToggle } = useToggleStore();
   const [data, setData] = useState<boolean>(false);
   const [error, setError] = useState<ErrorRes | Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const create = useCallback(
     async (req: ReqUserSignUp): Promise<void> => {
-      setSingUpToggle.off;
       setIsLoading(true);
       setError(null);
 
       try {
+        setSingUpToggle.on();
+        setSingInToggle.off();
+
         const res = await db.post<ReqUserSignUp, ResUserSignUp>('/auth/signup', req);
         if (isErrorRes(res)) {
           setError(res);
-          setSingUpToggle.off;
+          setSingUpToggle.on();
         } else {
           setData(true);
-          setSingUpToggle.on;
+          setSingUpToggle.off();
+          setSingInToggle.on();
         }
       } catch (error) {
         setError(new Error('Something went wrong!'));
-        setSingUpToggle.off;
+        setSingUpToggle.on();
       }
 
       setIsLoading(false);
@@ -44,7 +47,7 @@ export const useSignUp = (): {
   const reset = useCallback((): void => {
     setData(false);
     setError(null);
-    setSingUpToggle.off;
+    setSingUpToggle.off();
   }, [data, error]);
 
   return { data, error, isLoading, create, reset };

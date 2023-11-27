@@ -15,5 +15,15 @@ export interface CryptoCoin {
 export interface ResCMCGet {
   interval: ValueInterval;
   coinNames: string[];
-  data: Pick<CryptoCoin, 'price' | 'symbol' | 'currency' | 'createdAt' | 'id'>[];
+  data: CryptoCoin[];
+}
+
+export interface ReqCMCGet {
+  interval?: ValueInterval;
+  skip?: number;
+  take?: number;
+  cursorId?: string;
+  symbol?: string;
+  from?: Date;
+  to?: Date;
 }

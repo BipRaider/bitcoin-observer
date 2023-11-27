@@ -8,7 +8,7 @@ function App() {
   return (
     <div className={cn('grid w-full min-h-screen', styles.wrap)}>
       <Suspense>
-        <header className={cn(styles.header, 'mt-2 h-16')}>
+        <header className={cn(styles.header, 'h-full')}>
           <Navbar />
         </header>
         <main className={cn(styles.main, 'h-full')}>

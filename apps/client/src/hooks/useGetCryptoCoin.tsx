@@ -1,46 +1,39 @@
 import { useCallback, useState } from 'react';
 import { DBServer, ErrorRes, isErrorRes } from '../services';
-import { ReqUserSignIn, ResUserSignIn } from '../interfaces';
-import { useSessionStore, useToggleStore } from '@src/store';
+import { ResCMCGet, ReqCMCGet } from '../interfaces';
+import { useCMCStore } from '@src/store';
 
-export const useSignIn = (): {
+export const useGetCryptoCoin = (): {
   data: boolean;
   error: ErrorRes | Error | null;
   isLoading: boolean;
-  get: (req: ReqUserSignIn) => Promise<void>;
+  get: (req: ReqCMCGet) => Promise<void>;
   reset: () => void;
 } => {
   const db = new DBServer();
-  const { addUser } = useSessionStore();
-  const { setSingInToggle, setIsAuthToggle, setReload, setSingUpToggle } = useToggleStore();
+  const { addCMC } = useCMCStore();
+
   const [data, setData] = useState<boolean>(false);
   const [error, setError] = useState<ErrorRes | Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const get = useCallback(
-    async (req: ReqUserSignIn): Promise<void> => {
+    async (req: ReqCMCGet = {}): Promise<void> => {
       setIsLoading(true);
       setError(null);
 
       try {
-        setSingInToggle.on();
-
-        const res = await db.post<ReqUserSignIn, ResUserSignIn>('/auth/signin', req);
-
+        let res: ErrorRes | ResCMCGet;
+        if (req) res = await db.post<ReqCMCGet, ResCMCGet>('/coinmarketcap', req);
+        else res = await db.get<undefined, ResCMCGet>('/coinmarketcap', req);
         if (isErrorRes(res)) {
           setError(res);
-          setSingInToggle.on();
         } else {
           setData(true);
-          addUser(res.data);
-          setIsAuthToggle.on();
-          setReload.on();
-          setSingInToggle.off();
-          setSingUpToggle.off();
+          addCMC(res);
         }
       } catch (error) {
         setError(new Error('Something went wrong!'));
-        setSingInToggle.on();
       }
 
       setIsLoading(false);
@@ -51,7 +44,6 @@ export const useSignIn = (): {
   const reset = useCallback((): void => {
     setData(false);
     setError(null);
-    setSingInToggle.off();
   }, [data, error]);
 
   return { data, error, isLoading, get, reset };

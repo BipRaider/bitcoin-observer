@@ -9,6 +9,7 @@ export const POST_URL = {
   SIGN_UP: '/auth/signup',
   START: '/coinmarketcap/start',
   STOP: '/coinmarketcap/stop',
+  CMC: '/coinmarketcap',
 } as const;
 export type TypePostUrl = typeof POST_URL;
 export type ValuePostUrl = (typeof POST_URL)[keyof typeof POST_URL];

@@ -1,24 +1,34 @@
-import React, { useState, Suspense } from 'react';
+import React, { Suspense } from 'react';
 
 import { Drawer, Button, SignInForm, ButtonClose } from '@src/components';
+import { useToggleStore } from '@src/store';
 
 export const SignIn: React.FC = (): JSX.Element => {
-  const [isShowing, setIsShowing] = useState(false);
+  const {
+    toggles: { signInToggle },
+    setSingInToggle,
+  } = useToggleStore();
+
   return (
     <>
       <Suspense>
         <div>
-          <Button onClick={() => setIsShowing(pre => !pre)}>Sign In</Button>
+          <Button onClick={() => setSingInToggle.on()}>Sign In</Button>
         </div>
         <Drawer
-          isShowing={isShowing}
-          title={'Sign Up'}
+          isShowing={signInToggle}
+          title={'Sign In'}
           onShow={(value: boolean): void => {
-            setIsShowing(value);
+            try {
+              if (value) setSingInToggle.on();
+              else setSingInToggle.off();
+            } catch {
+              return;
+            }
           }}
         >
           <SignInForm />
-          <ButtonClose type="button" onClick={() => setIsShowing(pre => !pre)}>
+          <ButtonClose type="button" onClick={() => setSingInToggle.off()}>
             Close
           </ButtonClose>
         </Drawer>

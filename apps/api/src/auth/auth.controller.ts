@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { ConstantError } from 'src/interface';
+import { ConstantError, ResSignIn, ResSignUp, ResServer } from 'src/interface';
 import { PasswordUtil } from 'src/utils';
 import { UserService } from '../user/user.service';
 
@@ -24,7 +24,7 @@ export class AuthController {
 
   @HttpCode(200)
   @Post('signin')
-  async signin(@Body() { email, password }: SignInDto): Promise<{ access_token: string }> {
+  async signin(@Body() { email, password }: SignInDto): Promise<ResServer<ResSignIn>> {
     const userExists = await this.userService.get({ email });
 
     if (!userExists) throw new UnauthorizedException(ConstantError.EMAIL_OR_PASSWORD_IS_INCORRECT);
@@ -37,11 +37,13 @@ export class AuthController {
     if (!isCorrectPassword)
       throw new UnauthorizedException(ConstantError.EMAIL_OR_PASSWORD_IS_INCORRECT);
 
-    return this.authService.signin(userExists.email);
+    const data = await this.authService.signin(userExists);
+
+    return { status: 'ok', data };
   }
 
   @Post('signup')
-  async signup(@Body() dto: SignUpDto): Promise<{ status: string }> {
+  async signup(@Body() dto: SignUpDto): Promise<ResServer<ResSignUp>> {
     const existingUser = await this.userService.get({ email: dto.email });
 
     if (existingUser) throw new BadRequestException(ConstantError.USER_ALREADY_EXIST);
@@ -50,6 +52,6 @@ export class AuthController {
 
     if (!user) throw new BadRequestException(ConstantError.EMAIL_OR_PASSWORD_IS_INCORRECT);
 
-    return { status: 'ok' };
+    return { status: 'ok', data: {} };
   }
 }

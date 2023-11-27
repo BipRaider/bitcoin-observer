@@ -3,6 +3,7 @@ import { immer } from 'zustand/middleware/immer';
 
 interface State {
   toggles: {
+    isAuth: boolean;
     reload: boolean;
     signInToggle: boolean;
     signUpToggle: boolean;
@@ -16,7 +17,9 @@ interface ToggleBoolean {
 }
 
 type Actions = {
+  reset: () => void;
   setReload: ToggleBoolean;
+  setIsAuthToggle: ToggleBoolean;
   setSingInToggle: ToggleBoolean;
   setSingUpToggle: ToggleBoolean;
 };
@@ -55,6 +58,7 @@ const BaseState: State = {
     reload: false,
     signInToggle: false,
     signUpToggle: false,
+    isAuth: false,
   },
 };
 
@@ -65,6 +69,7 @@ const stateCreator = (): StateCreator<State & Actions, [], [['zustand/immer', ne
     setReload: toggle(set, 'reload'),
     setSingUpToggle: toggle(set, 'signUpToggle'),
     setSingInToggle: toggle(set, 'signInToggle'),
+    setIsAuthToggle: toggle(set, 'isAuth'),
   }));
 
 export const storeToggle = create(stateCreator());

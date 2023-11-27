@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
 
 import { UserService } from '../user/user.service';
 import { PasswordUtil } from '../utils';
-import { ResUser } from 'src/interface';
+import { ResUser, ResSignIn } from 'src/interface';
 
 import { SignUpDto } from './dto';
 
@@ -16,11 +15,13 @@ export class AuthService {
     private readonly passwordService: PasswordUtil,
   ) {}
 
-  async signin(email: User['email']): Promise<{ access_token: string }> {
-    const user = await this.userService.get({ email });
-    const payload = { email: user?.email, id: user?.id };
+  async signin(user: ResUser): Promise<ResSignIn> {
+    const payload = { email: user.email, id: user.id };
 
     return {
+      id: user.id,
+      username: user.username,
+      coinOptions: user.coinOptions,
       access_token: await this.jwtService.signAsync(payload),
     };
   }

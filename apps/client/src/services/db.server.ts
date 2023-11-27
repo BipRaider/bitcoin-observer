@@ -17,7 +17,7 @@ export class DBServer extends AxiosServer {
 
       const { data } = await this.axiosRef.patch(`${url}`, body);
 
-      if ('access_token' in data) this.writeSession('accessToken', data.access_token);
+      if ('access_token' in data.data) this.writeSession('accessToken', data.data.access_token);
 
       return data;
     } catch (error) {
@@ -32,7 +32,7 @@ export class DBServer extends AxiosServer {
 
       const { data } = await this.axiosRef.post(url, body);
 
-      if ('access_token' in data) this.writeSession('accessToken', data.access_token);
+      if ('access_token' in data.data) this.writeSession('accessToken', data.data.access_token);
 
       return data;
     } catch (error) {
@@ -47,7 +47,7 @@ export class DBServer extends AxiosServer {
 
       const { data } = await this.axiosRef.get(url, { params });
 
-      if ('access_token' in data) this.writeSession('accessToken', data.access_token);
+      if ('access_token' in data.data) this.writeSession('accessToken', data.data.access_token);
 
       return data;
     } catch (error) {
