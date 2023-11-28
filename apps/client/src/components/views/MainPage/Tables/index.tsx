@@ -114,17 +114,35 @@ export const Tables: React.FC<Props> = (): JSX.Element => {
 
   return (
     <div className="relative overflow-x-auto mb-2 md:mx-10 mx-1">
-      <div className="flex flex-row flex-wrap gap-1 justify-center content-center">
-        <Select label={'Coin name'} setDispatch={setSymbol} data={coinNames} />
+      <div className="flex flex-row flex-wrap gap-2 justify-center content-center">
+        <Select
+          label={'Coin name'}
+          setDispatch={setSymbol}
+          data={coinNames}
+          className="w-full ss:w-[150px]"
+        />
         <Select
           label={'Interval'}
           setDispatch={setInterval}
           data={IntervalArr}
           keyName="interval"
+          className="w-full ss:w-[150px]"
         />
-        <div className="mb-2 w-[150px]">
+        <div className="w-full ss:w-[150px]">
           <Label htmlFor="take" className="uppercase">
-            Take coin
+            Date from
+          </Label>
+          <InputDispatch name={'from'} setDispatch={setFrom} type="datetime-local" />
+        </div>
+        <div className="w-full ss:w-[150px]">
+          <Label htmlFor="take" className="uppercase">
+            Date to
+          </Label>
+          <InputDispatch name={'to'} setDispatch={setTo} type="datetime-local" />
+        </div>
+        <div className="w-full ss:w-[150px]">
+          <Label htmlFor="take" className="uppercase">
+            Take coins
           </Label>
           <InputDispatch
             name={'take'}
@@ -135,21 +153,8 @@ export const Tables: React.FC<Props> = (): JSX.Element => {
             type="number"
           />
         </div>
-
-        <div className="mb-2 w-[150px]">
-          <Label htmlFor="take" className="uppercase">
-            Date from
-          </Label>
-          <InputDispatch name={'from'} setDispatch={setFrom} type="datetime-local" />
-        </div>
-        <div className="mb-2 w-[150px]">
-          <Label htmlFor="take" className="uppercase">
-            Date to
-          </Label>
-          <InputDispatch name={'to'} setDispatch={setTo} type="datetime-local" />
-        </div>
       </div>
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 my-2">
         <Thead />
         <tbody>
           {itemList.map(({ id, symbol, price, createdAt, currency }) => {
@@ -159,9 +164,19 @@ export const Tables: React.FC<Props> = (): JSX.Element => {
           })}
         </tbody>
       </table>
-      <Button onClick={handlerPagination} className="mt-2">
-        Add new item
-      </Button>
+      <div className="flex flex-row flex-wrap gap-2 justify-center content-center">
+        <Button onClick={handlerPagination}>Add new item</Button>
+        <div className="w-[100px] text-center">
+          <InputDispatch
+            name={'take'}
+            value={take}
+            setDispatch={setTake}
+            min={1}
+            max={200}
+            type="number"
+          />
+        </div>
+      </div>
     </div>
   );
 };

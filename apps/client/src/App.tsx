@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { BrowserRouter, Routes as Switch, Navigate, Route } from 'react-router-dom';
 import cn from 'classnames';
 
 import styles from './App.module.css';
@@ -6,14 +7,22 @@ import { Navbar, MainPage } from './components';
 
 function App() {
   return (
-    <div className={cn('grid w-full min-h-screen', styles.wrap)}>
+    <div className={cn('grid w-full min-h-screen gap-3', styles.wrap)}>
       <Suspense>
         <header className={cn(styles.header, 'h-full')}>
           <Navbar />
         </header>
-        <main className={cn(styles.main, 'h-full')}>
-          <MainPage />
-        </main>
+
+        <BrowserRouter>
+          <main className={cn(styles.main, 'h-full')}>
+            <Suspense fallback={'Loading...'} />
+            <Switch>
+              <Route path="/" element={<MainPage />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Switch>
+          </main>
+        </BrowserRouter>
+
         <footer
           className={cn(
             styles.footer,
