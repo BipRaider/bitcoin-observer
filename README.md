@@ -10,6 +10,8 @@ The application is built using **TypeScript**.
 
 #### Backend
 
+The construction used was monolithic architecture.
+
 - [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 - [PostgreSQL](https://www.postgresql.org/download/) is a free and open-source relational database
   management system (RDBMS) emphasizing extensibility and SQL compliance.
