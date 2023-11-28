@@ -1,0 +1,281 @@
+{
+	"info": {
+		"_postman_id": "0584fac1-178f-44b7-a47f-466f1e005e12",
+		"name": "BTC Obs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11850757"
+	},
+	"item": [
+		{
+			"name": "SignUp",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"test\",\r\n    \"email\":\"test@test.test\",\r\n    \"password\":\"testtest\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SignIn",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"test@test.test\",\r\n    \"password\":\"testtest\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Start Cron",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC50ZXN0IiwiaWQiOjEsImlhdCI6MTcwMDg2MzI1OCwiZXhwIjoxNzAwODY5MjU4fQ._IV_f0SJU8z6slLUEwcslrGCTSrvYdp-W-FoRnPWHJ4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"interval\": \"ONE\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/coinmarketcap/start",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"coinmarketcap",
+						"start"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Stop Cron",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC50ZXN0IiwiaWQiOjEsImlhdCI6MTcwMDg2MzI1OCwiZXhwIjoxNzAwODY5MjU4fQ._IV_f0SJU8z6slLUEwcslrGCTSrvYdp-W-FoRnPWHJ4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"interval\": \"ONE\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/coinmarketcap/stop",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"coinmarketcap",
+						"stop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC50ZXN0IiwiaWQiOjEsImlhdCI6MTcwMDkxNTk3MCwiZXhwIjoxNzAwOTIxOTcwfQ.ag4Yfj0EyZxnt16edXnu2jvd6FYuVddnpLt2bDbpI2w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"test.test\",\r\n    \"coinNames\":\"BTC\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "coin marcket cap ",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC50ZXN0IiwiaWQiOiJmNDlmZTU5MS1kYWM5LTRhYmUtOWZiMy03ZDVkYzM1ZDJlMzciLCJpYXQiOjE3MDA5MTc5OTUsImV4cCI6MTcwMTAwNDM5NX0.wj1VGYsQh5gOuKcC9CZRqQrkY-DM3O5JzVuDdKxzMio",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-CMC_PRO_API_KEY",
+						"value": "71f8d5e2-54b0-46fa-b07b-dc472d662739",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/coinmarketcap",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"coinmarketcap"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "coin marcket cap post",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC50ZXN0IiwiaWQiOiJmNDlmZTU5MS1kYWM5LTRhYmUtOWZiMy03ZDVkYzM1ZDJlMzciLCJpYXQiOjE3MDEwMjM0NTUsImV4cCI6MTcwMTEwOTg1NX0.X05qvp3qnIPs2JMzN9LA4uSFz7n-DDofNaWJJVVw8NM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-CMC_PRO_API_KEY",
+						"value": "71f8d5e2-54b0-46fa-b07b-dc472d662739",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \r\n    \"symbol\":\"USDT\",\r\n \r\n    \"take\": 6\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/coinmarketcap",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"coinmarketcap"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
