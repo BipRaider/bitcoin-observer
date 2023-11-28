@@ -4,11 +4,28 @@
 
 This application tracks the price changes of cryptocurrencies.
 
+The application is built using **TypeScript**.
+
 ### Libraries and Frameworks
 
+#### Backend
+
 - [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [PostgreSQL](https://www.postgresql.org/download/) is a free and open-source relational database
+  management system (RDBMS) emphasizing extensibility and SQL compliance.
+- [Prisma ORM](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#get-all-post-records-where-date_created-is-greater-than-march-19th-2020)
+  Open source Node.js and TypeScript ORM with an intuitive data model, automated migrations,
+  type-safety, and auto-completion.
+- [class-validator](https://github.com/typestack/class-validator) Allows use of decorator and
+  non-decorator based validation. Internally uses validator.js to perform validation.
+
+#### Frontend
+
 - [React](https://react.dev/) React documentation.
 - [Vite](https://vitejs.dev/) Generation Frontend.
+- [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction) A small, fast, and scalable
+  bearbones state management solution. Zustand has a comfy API based on hooks.
+- [Zod](https://zod.dev/) TypeScript-first schema validation with static type inference
 - [CoinMarketCap](https://coinmarketcap.com) Works with API such as CoinMarketCap.
 - [Docker](https://www.docker.com/) Docker provides a suite of development tools and services.
 
